@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Telão de Chamadas – UBS Cacilda Fogaça de Almeida</title>
+<link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href="css/telao.css" />
+<link rel="icon" href="assets/logo.svg" type="image/svg+xml" />
+</head>
+<body class="telao-body">
+
+  <header class="topbar telao-topbar">
+    <img src="assets/logo.svg" alt="Logo UBS" class="logo-sm" />
+    <div class="topbar-titles">
+      <h1>UBS Cacilda Fogaça de Almeida</h1>
+      <h2>Secretaria de Saúde de Iperó</h2>
+    </div>
+    <div class="relogio">
+      <div id="hora">--:--:--</div>
+      <div id="data">--/--/----</div>
+    </div>
+  </header>
+
+  <main class="telao-main">
+    <section class="chamada-atual">
+      <div class="paciente-nome" id="paciente-atual">Aguardando chamada…</div>
+      <div class="info-linha">
+        <div class="info-item">
+          <span class="icone">🩺</span>
+          <span id="profissional-atual">—</span>
+        </div>
+        <div class="info-item">
+          <span class="icone">🚪</span>
+          <span id="sala-atual">—</span>
+        </div>
+      </div>
+    </section>
+
+    <aside class="historico">
+      <h3>Últimas chamadas</h3>
+      <ul id="historico-lista"></ul>
+    </aside>
+  </main>
+
+  <button id="btn-voltar-home" class="btn-home-canto" title="Voltar à Página Inicial">⌂</button>
+
+  <script src="js/firebase-config.js"></script>
+  <script src="js/sync.js"></script>
+  <script src="js/telao.js"></script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+.telao-body{
+  display:flex;flex-direction:column;min-height:100vh;
+  background:#081f36;color:#fff;overflow:hidden;
+}
+.telao-topbar{
+  background:linear-gradient(90deg,#062a4d,#0b3d6b 60%,#0f8a5f);
+  padding:14px 26px;
+}
+.telao-topbar .topbar-titles h1{font-size:1.3rem}
+.telao-topbar .topbar-titles h2{font-size:.95rem}
+
+.relogio{
+  margin-left:auto;text-align:right;font-variant-numeric:tabular-nums;
+}
+#hora{font-size:clamp(1.6rem,3vw,2.4rem);font-weight:800;letter-spacing:2px}
+#data{font-size:.85rem;opacity:.85}
+
+.telao-main{
+  flex:1;display:grid;grid-template-columns:3fr 1.1fr;
+  gap:22px;padding:26px;
+  min-height:0;
+}
+@media (max-width:1000px){
+  .telao-main{grid-template-columns:1fr;grid-template-rows:2fr 1fr}
+}
+
+.chamada-atual{
+  background:linear-gradient(160deg,#0b3d6b,#0f8a5f);
+  border-radius:24px;padding:40px;
+  display:flex;flex-direction:column;justify-content:center;gap:32px;
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
+  overflow:hidden;
+}
+.paciente-nome{
+  font-size:clamp(2.6rem,7vw,6rem);
+  font-weight:900;line-height:1.05;letter-spacing:1px;
+  text-transform:uppercase;
+  animation:pulse 2.2s ease-in-out infinite;
+  word-break:break-word;
+}
+@keyframes pulse{
+  0%,100%{opacity:1;transform:scale(1)}
+  50%{opacity:.92;transform:scale(1.015)}
+}
+.info-linha{display:flex;flex-wrap:wrap;gap:26px;font-size:clamp(1.2rem,2.6vw,2rem);font-weight:700}
+.info-item{display:flex;align-items:center;gap:12px}
+.info-item .icone{font-size:clamp(1.6rem,3vw,2.4rem)}
+
+.historico{
+  background:#0e2c4a;border-radius:20px;padding:22px;
+  display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.4);
+}
+.historico h3{
+  font-size:1.1rem;margin-bottom:12px;padding-bottom:10px;
+  border-bottom:2px solid rgba(255,255,255,.15);
+  text-transform:uppercase;letter-spacing:1px;
+}
+#historico-lista{list-style:none;display:flex;flex-direction:column;gap:10px;overflow:auto}
+#historico-lista li{
+  background:rgba(255,255,255,.07);
+  padding:14px 16px;border-radius:12px;
+  border-left:5px solid #19b37f;
+}
+#historico-lista li .h-pac{font-weight:800;font-size:1.15rem;text-transform:uppercase}
+#historico-lista li .h-info{font-size:.88rem;opacity:.85;margin-top:4px}
+#historico-lista li .h-hora{
+  font-size:.78rem;opacity:.7;float:right;
+}
+
+/* Botão pequeno canto inferior esquerdo */
+.btn-home-canto{
+  position:fixed;left:14px;bottom:14px;
+  width:46px;height:46px;border-radius:50%;
+  border:0;cursor:pointer;
+  background:rgba(255,255,255,.15);color:#fff;font-size:1.3rem;
+  display:flex;align-items:center;justify-content:center;
+  backdrop-filter:blur(6px);
+  transition:background .15s;
+  z-index:10;
+}
+.btn-home-canto:hover{background:rgba(255,255,255,.3)}

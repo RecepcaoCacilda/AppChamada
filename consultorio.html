@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Consultório – Painel de Chamada</title>
+<link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href="css/consultorio.css" />
+<link rel="icon" href="assets/logo.svg" type="image/svg+xml" />
+</head>
+<body class="consultorio-body">
+
+  <!-- ============ TELA 1: SELEÇÃO DE CONSULTÓRIO ============ -->
+  <section id="tela-selecao" class="tela">
+    <header class="topbar small">
+      <img src="assets/logo.svg" alt="Logo UBS" class="logo-sm" />
+      <div class="topbar-titles">
+        <h1>UBS Cacilda Fogaça de Almeida</h1>
+        <h2>Secretaria de Saúde de Iperó</h2>
+      </div>
+    </header>
+
+    <main class="selecao-main">
+      <h2>Selecione o Consultório</h2>
+      <p class="hint">Escolha a sala e informe o profissional responsável.</p>
+
+      <div id="grid-salas" class="grid-salas"><!-- gerado por JS --></div>
+
+      <form id="form-profissional" class="form-profissional" hidden>
+        <label for="input-profissional">Profissional responsável</label>
+        <input id="input-profissional" type="text" autocomplete="off"
+               placeholder="Ex.: Dra. Maria Silva" required />
+
+        <label class="checkbox">
+          <input type="checkbox" id="chk-lembrar" />
+          Lembrar neste navegador
+        </label>
+
+        <button type="submit" class="btn-primary">Confirmar e Entrar</button>
+      </form>
+    </main>
+
+    <a href="index.html" class="link-voltar">← Voltar à Página Inicial</a>
+  </section>
+
+  <!-- ============ TELA 2: PAINEL DE CHAMADA ============ -->
+  <section id="tela-chamada" class="tela" hidden>
+    <header class="topbar small">
+      <img src="assets/logo.svg" alt="Logo UBS" class="logo-sm" />
+      <div class="topbar-titles">
+        <h1 id="cab-sala">Consultório</h1>
+        <h2 id="cab-profissional">Profissional</h2>
+      </div>
+      <button id="btn-trocar" type="button" class="btn-ghost">Trocar Consultório</button>
+    </header>
+
+    <main class="chamada-main">
+      <div class="card-chamada">
+        <label for="input-paciente">Nome do paciente</label>
+        <input id="input-paciente" type="text" autocomplete="off"
+               placeholder="Digite o nome do paciente" />
+
+        <div class="botoes-chamada">
+          <button id="btn-chamar" type="button" class="btn-primary big">🔔 Chamar Paciente</button>
+          <button id="btn-repetir" type="button" class="btn-secondary big" disabled>🔁 Chamar Novamente</button>
+        </div>
+
+        <div id="status-envio" class="status" aria-live="polite"></div>
+
+        <fieldset class="sons">
+          <legend>Sinal sonoro do telão</legend>
+          <label><input type="radio" name="som" value="1" checked /> Som 1 (Campainha)</label>
+          <label><input type="radio" name="som" value="2" /> Som 2 (Sino)</label>
+          <label><input type="radio" name="som" value="3" /> Som 3 (Bipe)</label>
+          <label><input type="radio" name="som" value="4" /> Som 4 (Alarme suave)</label>
+          <label><input type="radio" name="som" value="5" /> Som 5 (Notificação)</label>
+        </fieldset>
+      </div>
+
+      <aside class="card-historico">
+        <h3>Últimas chamadas desta sala</h3>
+        <ul id="lista-historico"></ul>
+      </aside>
+    </main>
+
+    <a href="index.html" class="link-voltar">← Voltar à Página Inicial</a>
+  </section>
+
+  <!-- Modal "Chamada em andamento" — controlado via classe .aberto -->
+  <div id="modal-bloqueio" class="modal">
+    <div class="modal-box">
+      <h3>Aguarde…</h3>
+      <p id="modal-texto">Uma chamada está em andamento.</p>
+    </div>
+  </div>
+
+  <script src="js/firebase-config.js"></script>
+  <script src="js/sync.js"></script>
+  <script src="js/consultorio.js"></script>
+</body>
+</html>
