@@ -1,19 +1,20 @@
 .telao-body{
-  display:flex;flex-direction:column;min-height:100vh;
+  display:flex;flex-direction:column;min-height:100dvh;
   background:#081f36;color:#fff;overflow:hidden;
 }
 .telao-topbar{
   background:linear-gradient(90deg,#062a4d,#0b3d6b 60%,#0f8a5f);
-  padding:14px 26px;
+  padding:calc(14px + var(--safe-top)) 26px 14px;
 }
-.telao-topbar .topbar-titles h1{font-size:1.3rem}
-.telao-topbar .topbar-titles h2{font-size:.95rem}
+.telao-topbar .topbar-titles h1{font-size:clamp(.95rem,2.4vw,1.3rem)}
+.telao-topbar .topbar-titles h2{font-size:clamp(.7rem,1.8vw,.95rem)}
 
 .relogio{
   margin-left:auto;text-align:right;font-variant-numeric:tabular-nums;
+  flex-shrink:0;
 }
-#hora{font-size:clamp(1.6rem,3vw,2.4rem);font-weight:800;letter-spacing:2px}
-#data{font-size:.85rem;opacity:.85}
+#hora{font-size:clamp(1rem,3vw,2.4rem);font-weight:800;letter-spacing:2px}
+#data{font-size:clamp(.62rem,1.5vw,.85rem);opacity:.85}
 
 .telao-main{
   flex:1;display:grid;grid-template-columns:3fr 1.1fr;
@@ -21,18 +22,25 @@
   min-height:0;
 }
 @media (max-width:1000px){
-  .telao-main{grid-template-columns:1fr;grid-template-rows:2fr 1fr}
+  .telao-main{
+    grid-template-columns:1fr;
+    grid-template-rows:2fr 1fr;
+    gap:14px;padding:16px;
+  }
+}
+@media (max-width:600px){
+  .telao-main{padding:12px;gap:10px}
 }
 
 .chamada-atual{
   background:linear-gradient(160deg,#0b3d6b,#0f8a5f);
-  border-radius:24px;padding:40px;
-  display:flex;flex-direction:column;justify-content:center;gap:32px;
+  border-radius:24px;padding:clamp(20px,4vw,40px);
+  display:flex;flex-direction:column;justify-content:center;gap:clamp(16px,3vw,32px);
   box-shadow:0 20px 60px rgba(0,0,0,.5);
   overflow:hidden;
 }
 .paciente-nome{
-  font-size:clamp(2.6rem,7vw,6rem);
+  font-size:clamp(1.8rem,7vw,6rem);
   font-weight:900;line-height:1.05;letter-spacing:1px;
   text-transform:uppercase;
   animation:pulse 2.2s ease-in-out infinite;
@@ -42,34 +50,49 @@
   0%,100%{opacity:1;transform:scale(1)}
   50%{opacity:.92;transform:scale(1.015)}
 }
-.info-linha{display:flex;flex-wrap:wrap;gap:26px;font-size:clamp(1.2rem,2.6vw,2rem);font-weight:700}
-.info-item{display:flex;align-items:center;gap:12px}
-.info-item .icone{font-size:clamp(1.6rem,3vw,2.4rem)}
+.info-linha{
+  display:flex;flex-wrap:wrap;gap:clamp(14px,2.5vw,26px);
+  font-size:clamp(1rem,2.6vw,2rem);font-weight:700;
+}
+.info-item{display:flex;align-items:center;gap:12px;min-width:0}
+.info-item .icone{font-size:clamp(1.3rem,3vw,2.4rem)}
+.info-item span:last-child{
+  overflow:hidden;text-overflow:ellipsis;
+}
 
 .historico{
-  background:#0e2c4a;border-radius:20px;padding:22px;
+  background:#0e2c4a;border-radius:20px;padding:clamp(14px,2vw,22px);
   display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.4);
+  min-height:0;
 }
 .historico h3{
-  font-size:1.1rem;margin-bottom:12px;padding-bottom:10px;
+  font-size:clamp(.9rem,1.6vw,1.1rem);
+  margin-bottom:12px;padding-bottom:10px;
   border-bottom:2px solid rgba(255,255,255,.15);
   text-transform:uppercase;letter-spacing:1px;
 }
-#historico-lista{list-style:none;display:flex;flex-direction:column;gap:10px;overflow:auto}
+#historico-lista{
+  list-style:none;display:flex;flex-direction:column;gap:10px;
+  overflow:auto;min-height:0;
+}
 #historico-lista li{
   background:rgba(255,255,255,.07);
-  padding:14px 16px;border-radius:12px;
+  padding:12px 14px;border-radius:12px;
   border-left:5px solid #19b37f;
 }
-#historico-lista li .h-pac{font-weight:800;font-size:1.15rem;text-transform:uppercase}
-#historico-lista li .h-info{font-size:.88rem;opacity:.85;margin-top:4px}
+#historico-lista li .h-pac{
+  font-weight:800;font-size:clamp(.95rem,1.5vw,1.15rem);
+  text-transform:uppercase;
+}
+#historico-lista li .h-info{font-size:.85rem;opacity:.85;margin-top:4px}
 #historico-lista li .h-hora{
-  font-size:.78rem;opacity:.7;float:right;
+  font-size:.75rem;opacity:.7;float:right;
 }
 
-/* Botão pequeno canto inferior esquerdo */
+/* ---------- Botões flutuantes ---------- */
 .btn-home-canto{
-  position:fixed;left:14px;bottom:14px;
+  position:fixed;left:14px;
+  bottom:calc(14px + var(--safe-bottom));
   width:46px;height:46px;border-radius:50%;
   border:0;cursor:pointer;
   background:rgba(255,255,255,.15);color:#fff;font-size:1.3rem;
@@ -77,5 +100,67 @@
   backdrop-filter:blur(6px);
   transition:background .15s;
   z-index:10;
+  -webkit-tap-highlight-color:transparent;
 }
 .btn-home-canto:hover{background:rgba(255,255,255,.3)}
+
+/* Botão de ativar áudio */
+.btn-ativar-audio{
+  position:fixed;top:calc(14px + var(--safe-top));right:14px;
+  padding:12px 20px;border-radius:30px;border:0;cursor:pointer;
+  background:linear-gradient(135deg,#19b37f,#0f8a5f);
+  color:#fff;font-weight:700;font-size:.95rem;
+  box-shadow:0 6px 20px rgba(0,0,0,.4);
+  z-index:20;
+  animation:pulsar 1.6s ease-in-out infinite;
+  -webkit-tap-highlight-color:transparent;
+}
+.btn-ativar-audio:hover{filter:brightness(1.08)}
+.btn-ativar-audio.oculto{display:none}
+
+@keyframes pulsar{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.06)}
+}
+
+/* Indicador de leitura */
+.ouvindo{
+  position:fixed;bottom:calc(20px + var(--safe-bottom));right:20px;
+  background:rgba(25,179,127,.9);color:#fff;
+  padding:10px 18px;border-radius:30px;
+  font-weight:700;font-size:.9rem;
+  display:flex;align-items:center;gap:10px;
+  box-shadow:0 6px 20px rgba(0,0,0,.4);
+  opacity:0;transition:opacity .25s;
+  pointer-events:none;z-index:20;
+}
+.ouvindo.ativo{opacity:1}
+.ouvindo .bolinha{
+  width:10px;height:10px;border-radius:50%;background:#fff;
+  animation:piscar 1s ease-in-out infinite;
+}
+@keyframes piscar{
+  0%,100%{opacity:1}
+  50%{opacity:.25}
+}
+
+/* ---------- Telas muito estreitas (celular em retrato) ---------- */
+@media (max-width:500px){
+  .telao-main{
+    grid-template-columns:1fr;
+    grid-template-rows:auto 1fr;
+  }
+  .historico{max-height:34vh}
+}
+
+/* ---------- Celular em paisagem (baixo) ---------- */
+@media (max-height:500px) and (orientation:landscape){
+  .telao-topbar{padding:8px 14px}
+  .telao-topbar .topbar-titles h1{font-size:.85rem}
+  .telao-topbar .topbar-titles h2{display:none}
+  #hora{font-size:1.1rem}
+  #data{display:none}
+  .telao-main{grid-template-columns:2fr 1fr;gap:10px;padding:10px}
+  .chamada-atual{padding:14px}
+  .paciente-nome{font-size:clamp(1.4rem,5vw,2.8rem)}
+}
