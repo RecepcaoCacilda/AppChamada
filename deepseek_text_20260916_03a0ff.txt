@@ -1,0 +1,22 @@
+painel-ubs/
+├── index.html          → Página inicial
+├── consultorio.html    → Seleção + tela de chamada
+├── telao.html          → Telão de chamadas
+├── css/
+│   ├── style.css       → Estilos globais
+│   ├── consultorio.css → Estilos do consultório
+│   └── telao.css       → Estilos do telão
+├── js/
+│   ├── firebase-config.js → Configuração Firebase (você preenche)
+│   ├── sync.js            → Camada de sincronização (Firebase OU local)
+│   ├── consultorio.js     → Lógica do consultório
+│   └── telao.js           → Lógica do telão
+├── assets/
+│   ├── logo.svg        → Logo da UBS (placeholder)
+│   └── sounds/
+│       ├── som1.mp3 (não incluído — veja instruções)
+│       ├── som2.mp3
+│       ├── som3.mp3
+│       ├── som4.mp3
+│       └── som5.mp3
+└── README.md

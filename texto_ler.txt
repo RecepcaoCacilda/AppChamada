@@ -1,0 +1,7 @@
+
+## Dicas
+- Para o telão em tela cheia: pressione **F11** no navegador.
+- Hospede a pasta em qualquer serviço estático (GitHub Pages, Netlify, Vercel,
+  ou até um servidor interno da Secretaria). Basta servir os arquivos.
+- Para uso interno sem internet externa, rode um servidor local simples
+  (ex.: `python -m http.server 8080`) na máquina servidora da UBS.
