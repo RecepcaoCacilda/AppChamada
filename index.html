@@ -1060,7 +1060,9 @@
         let localCalls = [];
 
         // Broadcast Channel for Multi-Tab Sync
-        const syncChannel = new BroadcastChannel('ubs_chamadas_channel');
+        const syncChannel = ('BroadcastChannel' in window)
+            ? new BroadcastChannel('ubs_chamadas_channel')
+            : null;
 
         // Carrega ou Inicializa os 15 Consultórios Editáveis
         function loadConsultoriosData() {
@@ -1237,26 +1239,26 @@
 
         // Voice Synthesis (TTS) for Patient Call
         function speakCall(patient, room, professional) {
-    if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
 
-        const prof = professional && professional.trim()
-            ? `, atendimento com ${professional}`
-            : '';
+                const prof = professional && professional.trim()
+                    ? `, atendimento com ${professional}`
+                    : '';
 
-        const text = `Atenção. Paciente ${patient}. Dirigir-se ao ${room}${prof}.`;
+                const text = `Atenção. Paciente ${patient}. Dirigir-se ao ${room}${prof}.`;
 
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'pt-BR';
-        utterance.rate = 0.88;
-        utterance.pitch = 1;
-        utterance.volume = 1;
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'pt-BR';
+                utterance.rate = 0.88;
+                utterance.pitch = 1;
+                utterance.volume = 1;
 
-        setTimeout(() => {
-            window.speechSynthesis.speak(utterance);
-        }, 900);
-    }
-}
+                setTimeout(() => {
+                    window.speechSynthesis.speak(utterance);
+                }, 900);
+            }
+        }
 
         // Navigation Helper
         function navigateTo(viewId) {
@@ -1305,7 +1307,9 @@
                 time: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
             };
 
-            syncChannel.postMessage({ type: 'NEW_CALL', data: callData });
+            if (syncChannel) {
+                syncChannel.postMessage({ type: 'NEW_CALL', data: callData });
+            }
             saveCallToStorage(callData);
             showCallAlert();
             addLocalHistory(callData);
@@ -1390,7 +1394,7 @@
                     <div class="p-meta">
                         <span class="loc"><i class="fa-solid fa-door-open"></i> ${item.room}</span>
                         <span><i class="fa-solid fa-user-doctor"></i> ${item.doctor || "Profissional não informado"}</span>
-                            <span><i class="fa-solid fa-clock"></i> ${item.time}</span>
+                        <span><i class="fa-solid fa-clock"></i> ${item.time}</span>
                     </div>
                 </div>
             `).join('');
