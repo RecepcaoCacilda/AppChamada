@@ -1,0 +1,1448 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Chamada - UBS Cacilda Fogaça de Almeida</title>
+
+    <!-- Google Fonts & Font Awesome Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #0066b2;
+            --primary-dark: #004c8c;
+            --primary-light: #e6f0fa;
+            --secondary: #00a859;
+            --secondary-dark: #008043;
+            --secondary-light: #e6f6ec;
+            --accent: #ff9800;
+            --bg-light: #f4f7f6;
+            --surface: #ffffff;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --border-color: #e5e7eb;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+            --radius-md: 12px;
+            --radius-lg: 16px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            line-height: 1.5;
+        }
+
+        /* Utility View Management */
+        .view {
+            display: none;
+            width: 100%;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+
+        .view.active {
+            display: flex;
+        }
+
+        /* HEADER COMMON */
+        .header-bar {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow-md);
+            z-index: 10;
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .brand-logo {
+            width: 48px;
+            height: 48px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 24px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+        }
+
+        .brand-text h1 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            line-height: 1.2;
+        }
+
+        .brand-text p {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 24px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* BUTTONS & CONTROLS */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: var(--radius-md);
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: white;
+        }
+        .btn-secondary:hover {
+            background-color: var(--secondary-dark);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--border-color);
+            color: var(--text-main);
+        }
+        .btn-outline:hover {
+            background-color: rgba(0,0,0,0.03);
+            border-color: #cbd5e1;
+        }
+
+        .btn-large {
+            padding: 24px 32px;
+            font-size: 1.25rem;
+            border-radius: var(--radius-lg);
+            flex: 1;
+            min-width: 280px;
+            flex-direction: column;
+            gap: 12px;
+            text-align: center;
+        }
+
+        .btn-large i {
+            font-size: 2.5rem;
+        }
+
+        /* 1. HOME VIEW */
+        .home-hero {
+            text-align: center;
+            margin: auto 0;
+            padding: 40px 20px;
+        }
+
+        .home-hero .hero-icon {
+            font-size: 64px;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .home-hero h2 {
+            font-size: 2.2rem;
+            color: var(--primary-dark);
+            margin-bottom: 12px;
+            font-weight: 800;
+        }
+
+        .home-hero p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 40px auto;
+        }
+
+        .home-actions {
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+            flex-wrap: wrap;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* 2. CONSULTORIO SELECT VIEW (15 BOTOES EDITAVEIS) */
+        .card {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+        }
+
+        .view-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5rem;
+            color: var(--primary-dark);
+            margin-bottom: 24px;
+            border-bottom: 2px solid var(--primary-light);
+            padding-bottom: 12px;
+        }
+
+        .grid-consultorios {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .card-consultorio-opt {
+            background: var(--surface);
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 10px;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .card-consultorio-opt:hover {
+            border-color: var(--primary);
+            box-shadow: var(--shadow-md);
+        }
+
+        .card-consultorio-opt.selected {
+            border-color: var(--primary);
+            background-color: var(--primary-light);
+        }
+
+        .consultorio-info {
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .consultorio-info .sala-name {
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: var(--primary-dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .consultorio-info .prof-name {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .card-opt-actions {
+            display: flex;
+            gap: 6px;
+            margin-top: 6px;
+        }
+
+        .btn-card-select {
+            flex: 1;
+            padding: 8px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+
+        .btn-card-select:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-card-edit {
+            padding: 8px 10px;
+            background-color: var(--bg-light);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-main);
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+
+        .btn-card-edit:hover {
+            background-color: #cbd5e1;
+        }
+
+        /* MODAL DE EDIÇÃO DE CONSULTÓRIO */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-box {
+            background: white;
+            padding: 24px;
+            border-radius: var(--radius-lg);
+            width: 90%;
+            max-width: 420px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .modal-box h3 {
+            margin-bottom: 16px;
+            color: var(--primary-dark);
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+            color: var(--text-main);
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 12px 14px;
+            font-size: 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            outline: none;
+            transition: border-color 0.2s;
+            background-color: white;
+        }
+
+        .form-input:focus, .form-select:focus {
+            border-color: var(--primary);
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 24px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .checkbox-group input {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+
+        /* 3. CONSULTORIO CALL PANEL */
+        .top-info-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--surface);
+            padding: 16px 24px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 24px;
+            border: 1px solid var(--border-color);
+        }
+
+        .consultorio-badge {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .badge-number {
+            background-color: var(--primary);
+            color: white;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 1rem;
+        }
+
+        .badge-doctor {
+            font-weight: 600;
+            color: var(--text-main);
+            font-size: 1.1rem;
+        }
+
+        .call-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 24px;
+        }
+
+        .alert-success {
+            display: none;
+            background-color: var(--secondary-light);
+            color: var(--secondary-dark);
+            border: 1px solid #a3e635;
+            padding: 14px 20px;
+            border-radius: var(--radius-md);
+            margin-bottom: 20px;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .history-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background: var(--bg-light);
+            border-radius: 8px;
+            font-size: 0.95rem;
+        }
+
+        .history-item .time {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        /* Sound Selector Box */
+        .sound-selector-container {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .btn-test-sound {
+            padding: 12px 16px;
+            background-color: var(--primary-light);
+            color: var(--primary-dark);
+            border: 2px solid var(--primary);
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .btn-test-sound:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        /* 4. TELÃO DE CHAMADAS (TV DISPLAY) */
+        .view-telao {
+            background-color: #0b1528;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .telao-header {
+            background-color: #112240;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        .telao-clock {
+            text-align: right;
+            font-family: monospace, sans-serif;
+        }
+
+        .telao-clock .time {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #64ffda;
+        }
+
+        .telao-clock .date {
+            font-size: 1rem;
+            color: #8892b0;
+        }
+
+        .telao-content {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 2.2fr 1fr;
+            gap: 24px;
+            padding: 32px 40px;
+        }
+
+        .main-call-box {
+            background: linear-gradient(145deg, #1d3557, #112240);
+            border: 2px solid #2a4365;
+            border-radius: var(--radius-lg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-call-box.flash {
+            animation: pulseBg 1.2s ease-in-out 3;
+        }
+
+        @keyframes pulseBg {
+            0% { border-color: var(--secondary); box-shadow: 0 0 30px rgba(0, 168, 89, 0.6); }
+            50% { border-color: #ff9800; box-shadow: 0 0 50px rgba(255, 152, 0, 0.8); }
+            100% { border-color: #2a4365; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5); }
+        }
+
+        .patient-label {
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: #8892b0;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .patient-name {
+            font-size: 4.2rem;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1.1;
+            margin-bottom: 36px;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            word-break: break-word;
+        }
+
+        .details-grid {
+            display: flex;
+            gap: 32px;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .detail-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px 32px;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .detail-card i {
+            font-size: 2.5rem;
+            color: #64ffda;
+        }
+
+        .detail-info {
+            text-align: left;
+        }
+
+        .detail-info .sub {
+            font-size: 0.9rem;
+            color: #8892b0;
+            text-transform: uppercase;
+        }
+
+        .detail-info .val {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .sidebar-history {
+            background-color: #112240;
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #2a4365;
+        }
+
+        .sidebar-history h3 {
+            color: #8892b0;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #2a4365;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .telao-history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            overflow-y: auto;
+        }
+
+        .telao-history-item {
+            background: #1d3557;
+            border-radius: var(--radius-md);
+            padding: 16px;
+            border-left: 5px solid var(--primary);
+            transition: transform 0.2s;
+        }
+
+        .telao-history-item .p-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .telao-history-item .p-meta {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            font-size: 0.95rem;
+            color: #8892b0;
+        }
+
+        .telao-history-item .p-meta .loc {
+            color: #64ffda;
+            font-weight: 600;
+        }
+
+        /* Telão Navigation & Controls */
+        .home-back-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.12);
+            color: #8892b0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 8px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+            z-index: 100;
+        }
+
+        .home-back-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            color: white;
+            transform: scale(1.03);
+        }
+
+        .fullscreen-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border: none;
+            padding: 12px 18px;
+            border-radius: 30px;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+            z-index: 100;
+        }
+
+        .fullscreen-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 900px) {
+            .telao-content {
+                grid-template-columns: 1fr;
+                padding: 16px;
+            }
+
+            .patient-name {
+                font-size: 2.8rem;
+            }
+
+            .details-grid {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .detail-card {
+                padding: 14px 20px;
+            }
+
+            .detail-info .val {
+                font-size: 1.4rem;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .header-bar {
+                padding: 12px 16px;
+            }
+
+            .brand-logo {
+                width: 38px;
+                height: 38px;
+                font-size: 18px;
+            }
+
+            .brand-text h1 {
+                font-size: 0.95rem;
+            }
+
+            .home-hero h2 {
+                font-size: 1.6rem;
+            }
+
+            .home-actions {
+                flex-direction: column;
+            }
+
+            .btn-large {
+                width: 100%;
+                min-width: auto;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .top-info-bar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .sound-selector-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. PÁGINA INICIAL -->
+    <section id="view-home" class="view active">
+        <header class="header-bar">
+            <div class="header-brand">
+                <div class="brand-logo"><i class="fa-solid fa-hospital-user"></i></div>
+                <div class="brand-text">
+                    <h1>UBS Cacilda Fogaça de Almeida</h1>
+                    <p>Secretaria de Saúde de Iperó</p>
+                </div>
+            </div>
+        </header>
+
+        <main class="container">
+            <div class="home-hero">
+                <div class="hero-icon">
+                    <i class="fa-solid fa-notes-medical"></i>
+                </div>
+                <h2>Painel de Chamada de Pacientes</h2>
+                <p>Selecione o modo de acesso abaixo para iniciar o gerenciamento ou exibição das chamadas em tempo real.</p>
+
+                <div class="home-actions">
+                    <button class="btn btn-primary btn-large" onclick="navigateTo('view-select-consultorio')">
+                        <i class="fa-solid fa-user-doctor"></i>
+                        <span>Sou um Consultório</span>
+                    </button>
+                    <button class="btn btn-secondary btn-large" onclick="openTelao()">
+                        <i class="fa-solid fa-tv"></i>
+                        <span>Abrir Telão de Chamadas</span>
+                    </button>
+                </div>
+            </div>
+        </main>
+    </section>
+
+    <!-- 2. SELEÇÃO DE CONSULTÓRIO (COM 15 BOTÕES EDITÁVEIS) -->
+    <section id="view-select-consultorio" class="view">
+        <header class="header-bar">
+            <div class="header-brand">
+                <div class="brand-logo"><i class="fa-solid fa-hospital-user"></i></div>
+                <div class="brand-text">
+                    <h1>UBS Cacilda Fogaça de Almeida</h1>
+                    <p>Secretaria de Saúde de Iperó</p>
+                </div>
+            </div>
+            <button class="btn btn-outline" style="color:white; border-color:rgba(255,255,255,0.4);" onclick="navigateTo('view-home')">
+                <i class="fa-solid fa-arrow-left"></i> Início
+            </button>
+        </header>
+
+        <main class="container">
+            <div class="card" style="max-width: 950px; margin: 20px auto; width: 100%;">
+                <h2 class="view-title"><i class="fa-solid fa-door-open"></i> Selecione o Consultório ou Sala</h2>
+                
+                <!-- Grid com os 15 Botões Editáveis -->
+                <div class="grid-consultorios" id="grid-consultorios-list">
+                    <!-- Gerado dinamicamente via JS -->
+                </div>
+
+                <label class="checkbox-group">
+                    <input type="checkbox" id="remember-me" checked>
+                    <span>Lembrar a sala selecionada neste navegador</span>
+                </label>
+            </div>
+        </main>
+    </section>
+
+    <!-- MODAL DE EDIÇÃO DE CONSULTÓRIO -->
+    <div class="modal-overlay" id="modal-edit-consultorio">
+        <div class="modal-box">
+            <h3><i class="fa-solid fa-pen-to-square"></i> Editar Consultório</h3>
+            <div class="form-group">
+                <label for="modal-input-sala">Nome da Sala / Consultório:</label>
+                <input type="text" id="modal-input-sala" class="form-input" placeholder="Ex: Consultório 01, Odontologia...">
+            </div>
+            <div class="form-group">
+                <label for="modal-input-prof">Nome do Médico / Enfermeiro / Atendente:</label>
+                <input type="text" id="modal-input-prof" class="form-input" placeholder="Ex: Dr. João Silva / Enf. Maria">
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-outline" onclick="closeEditModal()">Cancelar</button>
+                <button class="btn btn-primary" onclick="saveConsultorioEdit()">Salvar Alterações</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. TELA DO CONSULTÓRIO -->
+    <section id="view-consultorio" class="view">
+        <header class="header-bar">
+            <div class="header-brand">
+                <div class="brand-logo"><i class="fa-solid fa-hospital-user"></i></div>
+                <div class="brand-text">
+                    <h1>Painel do Consultório</h1>
+                    <p>UBS Cacilda Fogaça de Almeida</p>
+                </div>
+            </div>
+            <button class="btn btn-outline" style="color:white; border-color:rgba(255,255,255,0.4);" onclick="changeConsultorio()">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i> Trocar Consultório
+            </button>
+        </header>
+
+        <main class="container" style="max-width: 800px;">
+            <div class="top-info-bar">
+                <div class="consultorio-badge">
+                    <span id="display-consultorio-name" class="badge-number">Consultório 01</span>
+                    <span id="display-doctor-name" class="badge-doctor">Dr. Não informado</span>
+                </div>
+                <a href="#" style="color: var(--primary); text-decoration: none; font-weight: 600; font-size: 0.9rem;" onclick="navigateTo('view-home')">
+                    <i class="fa-solid fa-house"></i> Página Inicial
+                </a>
+            </div>
+
+            <div class="call-card">
+                <div id="alert-success" class="alert-success">
+                    <i class="fa-solid fa-circle-check" style="font-size: 1.4rem;"></i>
+                    <span>Chamada enviada com sucesso para o telão!</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="patient-input" style="font-size: 1.2rem; color: var(--primary-dark);">
+                        <i class="fa-solid fa-hospital-user"></i> Nome Completo do Paciente:
+                    </label>
+                    <input type="text" id="patient-input" class="form-input" placeholder="Digite o nome do paciente..." style="font-size: 1.3rem; padding: 16px;" onkeypress="handleKeyPress(event)">
+                </div>
+
+                <!-- Seletor de Sinal Sonoro -->
+                <div class="form-group">
+                    <label for="chime-select" style="font-size: 1rem; color: var(--text-main);">
+                        <i class="fa-solid fa-music"></i> Sinal Sonoro da Chamada:
+                    </label>
+                    <div class="sound-selector-container">
+                        <select id="chime-select" class="form-select" onchange="saveChimePreference()">
+                            <option value="chime-classic">1. Chime Hospitalar Clássico (Triplo - Mi/Dó/Sol)</option>
+                            <option value="chime-modern">2. Beep Moderno (Duplo Suave)</option>
+                            <option value="chime-bell">3. Campainha Suave (Sino Elegante)</option>
+                        </select>
+                        <button type="button" class="btn-test-sound" onclick="testSelectedSound()">
+                            <i class="fa-solid fa-volume-high"></i> Testar Som
+                        </button>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+                    <button class="btn btn-secondary" style="flex: 2; min-width: 200px; font-size: 1.1rem; padding: 16px;" onclick="chamarPaciente()">
+                        <i class="fa-solid fa-bullhorn"></i> Chamar Paciente
+                    </button>
+                    <button class="btn btn-outline" style="flex: 1; min-width: 160px; font-size: 1rem;" onclick="chamarNovamente()">
+                        <i class="fa-solid fa-rotate-right"></i> Chamar Novamente
+                    </button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 style="font-size: 1.1rem; color: var(--text-muted); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                    <i class="fa-solid fa-clock-rotate-left"></i> Últimas Chamadas do Seu Consultório
+                </h3>
+                <ul id="local-history" class="history-list">
+                    <li style="color: var(--text-muted); font-style: italic;">Nenhuma chamada realizada nesta sessão.</li>
+                </ul>
+            </div>
+        </main>
+    </section>
+
+    <!-- 4. PÁGINA DO TELÃO DE CHAMADAS -->
+    <section id="view-telao" class="view view-telao">
+        <header class="telao-header">
+            <div class="header-brand">
+                <div class="brand-logo" style="width: 54px; height: 54px; font-size: 28px; color: var(--primary);">
+                    <i class="fa-solid fa-hospital"></i>
+                </div>
+                <div class="brand-text">
+                    <h1 style="font-size: 1.4rem;">UBS Cacilda Fogaça de Almeida</h1>
+                    <p style="font-size: 1rem; color: #8892b0;">Secretaria de Saúde de Iperó</p>
+                </div>
+            </div>
+
+            <div class="telao-clock">
+                <div id="clock-time" class="time">00:00:00</div>
+                <div id="clock-date" class="date">Segunda-feira, 14 de Setembro</div>
+            </div>
+        </header>
+
+        <main class="telao-content">
+            <!-- Painel Principal de Chamada -->
+            <div id="main-call-box" class="main-call-box">
+                <div class="patient-label"><i class="fa-solid fa-user-large"></i> Paciente Anunciado</div>
+                <div id="telao-patient-name" class="patient-name">Aguardando Chamada...</div>
+
+                <div class="details-grid">
+                    <div class="detail-card">
+                        <i class="fa-solid fa-door-open"></i>
+                        <div class="detail-info">
+                            <div class="sub">Local de Atendimento</div>
+                            <div id="telao-room" class="val">---</div>
+                        </div>
+                    </div>
+                    <div class="detail-card">
+                        <i class="fa-solid fa-user-doctor"></i>
+                        <div class="detail-info">
+                            <div class="sub">Médico / Profissional</div>
+                            <div id="telao-doctor" class="val">---</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lista de Histórico Recente -->
+            <aside class="sidebar-history">
+                <h3><i class="fa-solid fa-list-ol"></i> Últimas Chamadas</h3>
+                <div id="telao-history-list" class="telao-history-list">
+                    <div style="color: #8892b0; text-align: center; padding: 20px;">Nenhuma chamada recente</div>
+                </div>
+            </aside>
+        </main>
+
+        <!-- Botão Pequeno para Voltar no Canto Inferior Esquerdo -->
+        <button class="home-back-btn" onclick="navigateTo('view-home')">
+            <i class="fa-solid fa-house"></i> Início
+        </button>
+
+        <button class="fullscreen-btn" onclick="toggleFullscreen()">
+            <i class="fa-solid fa-expand"></i> Tela Cheia
+        </button>
+    </section>
+
+    <!-- LOGIC & SYNCHRONIZATION SCRIPT -->
+    <script>
+        // State Management
+        const TOTAL_CONSULTORIOS = 15;
+        let consultorios = [];
+        let selectedConsultorio = '';
+        let doctorName = '';
+        let activeEditingId = null;
+        let lastCalledPatient = '';
+        let localCalls = [];
+
+        // Broadcast Channel for Multi-Tab Sync
+        const syncChannel = new BroadcastChannel('ubs_chamadas_channel');
+
+        // Carrega ou Inicializa os 15 Consultórios Editáveis
+        function loadConsultoriosData() {
+            const savedData = localStorage.getItem('ubs_consultorios_list');
+            if (savedData) {
+                consultorios = JSON.parse(savedData);
+            } else {
+                consultorios = [];
+                for (let i = 1; i <= TOTAL_CONSULTORIOS; i++) {
+                    let defaultName = `Consultório ${i < 10 ? '0' + i : i}`;
+                    let defaultProf = 'Médico / Profissional';
+                    if (i === 6) defaultName = 'Odontologia';
+                    if (i === 7) defaultName = 'Sala de Vacinas';
+                    if (i === 8) defaultName = 'Triagem';
+
+                    consultorios.push({
+                        id: i,
+                        sala: defaultName,
+                        profissional: defaultProf
+                    });
+                }
+                saveConsultoriosData();
+            }
+            renderConsultoriosGrid();
+        }
+
+        function saveConsultoriosData() {
+            localStorage.setItem('ubs_consultorios_list', JSON.stringify(consultorios));
+        }
+
+        // Renderiza os 15 Cards na Tela de Seleção
+        function renderConsultoriosGrid() {
+            const container = document.getElementById('grid-consultorios-list');
+            if (!container) return;
+
+            const currentSelected = localStorage.getItem('ubs_saved_consultorio_id');
+
+            container.innerHTML = consultorios.map(c => `
+                <div class="card-consultorio-opt ${currentSelected == c.id ? 'selected' : ''}" id="card-consultorio-${c.id}">
+                    <div class="consultorio-info" onclick="selectConsultorioCard(${c.id})">
+                        <div class="sala-name">
+                            <i class="fa-solid fa-stethoscope"></i> ${c.sala}
+                        </div>
+                        <div class="prof-name">${c.profissional}</div>
+                    </div>
+                    <div class="card-opt-actions">
+                        <button class="btn-card-select" onclick="selectConsultorioCard(${c.id})">Entrar</button>
+                        <button class="btn-card-edit" onclick="openEditModal(${c.id})" title="Editar Sala e Profissional">
+                            <i class="fa-solid fa-pen"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function selectConsultorioCard(id) {
+            const item = consultorios.find(c => c.id === id);
+            if (!item) return;
+
+            selectedConsultorio = item.sala;
+            doctorName = item.profissional;
+
+            document.querySelectorAll('.card-consultorio-opt').forEach(el => el.classList.remove('selected'));
+            const cardEl = document.getElementById(`card-consultorio-${id}`);
+            if (cardEl) cardEl.classList.add('selected');
+
+            if (document.getElementById('remember-me').checked) {
+                localStorage.setItem('ubs_saved_consultorio', selectedConsultorio);
+                localStorage.setItem('ubs_saved_doctor', doctorName);
+                localStorage.setItem('ubs_saved_consultorio_id', id);
+            }
+
+            confirmAndEnter(selectedConsultorio, doctorName);
+        }
+
+        function openEditModal(id) {
+            activeEditingId = id;
+            const item = consultorios.find(c => c.id === id);
+            if (item) {
+                document.getElementById('modal-input-sala').value = item.sala;
+                document.getElementById('modal-input-prof').value = item.profissional;
+                document.getElementById('modal-edit-consultorio').classList.add('active');
+            }
+        }
+
+        function closeEditModal() {
+            document.getElementById('modal-edit-consultorio').classList.remove('active');
+            activeEditingId = null;
+        }
+
+        function saveConsultorioEdit() {
+            if (activeEditingId === null) return;
+
+            const salaVal = document.getElementById('modal-input-sala').value.trim();
+            const profVal = document.getElementById('modal-input-prof').value.trim();
+
+            if (!salaVal) {
+                alert('O nome da sala não pode ficar em branco.');
+                return;
+            }
+
+            const item = consultorios.find(c => c.id === activeEditingId);
+            if (item) {
+                item.sala = salaVal;
+                item.profissional = profVal || 'Médico / Profissional';
+                saveConsultoriosData();
+                renderConsultoriosGrid();
+                closeEditModal();
+            }
+        }
+
+        function confirmAndEnter(sala, prof) {
+            document.getElementById('display-consultorio-name').innerText = sala;
+            document.getElementById('display-doctor-name').innerText = prof;
+            navigateTo('view-consultorio');
+        }
+
+        function changeConsultorio() {
+            navigateTo('view-select-consultorio');
+        }
+
+        // Audio Context for Custom Chime Sounds
+        function playChime(chimeType = 'chime-classic') {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                
+                const playNote = (freq, start, duration, type = 'sine', maxGain = 0.3) => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = type;
+                    osc.frequency.setValueAtTime(freq, audioCtx.currentTime + start);
+                    
+                    gain.gain.setValueAtTime(0, audioCtx.currentTime + start);
+                    gain.gain.linearRampToValueAtTime(maxGain, audioCtx.currentTime + start + 0.04);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + start + duration);
+
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+
+                    osc.start(audioCtx.currentTime + start);
+                    osc.stop(audioCtx.currentTime + start + duration);
+                };
+
+                if (chimeType === 'chime-modern') {
+                    // Opção 2: Beep Moderno (Duplo Suave)
+                    playNote(587.33, 0, 0.25, 'sine', 0.25);   // D5
+                    playNote(880.00, 0.2, 0.45, 'sine', 0.25);  // A5
+                } else if (chimeType === 'chime-bell') {
+                    // Opção 3: Campainha Suave (Sino Elegante)
+                    playNote(523.25, 0, 0.6, 'sine', 0.3);      // C5
+                    playNote(659.25, 0.15, 0.8, 'sine', 0.25);   // E5
+                    playNote(783.99, 0.3, 1.0, 'sine', 0.2);    // G5
+                } else {
+                    // Opção 1: Hospitalar Clássico (E5 -> C5 -> G4)
+                    playNote(659.25, 0, 0.4, 'sine', 0.3);      // E5
+                    playNote(523.25, 0.3, 0.4, 'sine', 0.3);    // C5
+                    playNote(392.00, 0.6, 0.8, 'sine', 0.3);    // G4
+                }
+            } catch (e) {
+                console.log('Audio autoplay restricted or not supported:', e);
+            }
+        }
+
+        // Test Sound in Consultorio Panel
+        function testSelectedSound() {
+            const chimeType = document.getElementById('chime-select').value;
+            playChime(chimeType);
+        }
+
+        function saveChimePreference() {
+            const chimeType = document.getElementById('chime-select').value;
+            localStorage.setItem('ubs_saved_chime', chimeType);
+        }
+
+        // Voice Synthesis (TTS) for Patient Call
+        function speakCall(patient, room, professional) {
+    if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+
+        const prof = professional && professional.trim()
+            ? `, atendimento com ${professional}`
+            : '';
+
+        const text = `Atenção. Paciente ${patient}. Dirigir-se ao ${room}${prof}.`;
+
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'pt-BR';
+        utterance.rate = 0.88;
+        utterance.pitch = 1;
+        utterance.volume = 1;
+
+        setTimeout(() => {
+            window.speechSynthesis.speak(utterance);
+        }, 900);
+    }
+}
+
+        // Navigation Helper
+        function navigateTo(viewId) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
+        }
+
+        // Call Actions
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                chamarPaciente();
+            }
+        }
+
+        function chamarPaciente() {
+            const input = document.getElementById('patient-input');
+            const patientName = input.value.trim();
+
+            if (!patientName) {
+                alert('Por favor, digite o nome do paciente.');
+                return;
+            }
+
+            lastCalledPatient = patientName;
+            sendCall(patientName);
+            input.value = '';
+            input.focus();
+        }
+
+        function chamarNovamente() {
+            if (!lastCalledPatient) {
+                alert('Nenhuma chamada anterior para repetir.');
+                return;
+            }
+            sendCall(lastCalledPatient);
+        }
+
+        function sendCall(patientName) {
+            const chimeType = document.getElementById('chime-select').value;
+            const callData = {
+                id: Date.now(),
+                patient: patientName,
+                doctor: doctorName,
+                room: selectedConsultorio,
+                chime: chimeType,
+                time: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+            };
+
+            syncChannel.postMessage({ type: 'NEW_CALL', data: callData });
+            saveCallToStorage(callData);
+            showCallAlert();
+            addLocalHistory(callData);
+        }
+
+        function showCallAlert() {
+            const alertBox = document.getElementById('alert-success');
+            alertBox.style.display = 'flex';
+            setTimeout(() => {
+                alertBox.style.display = 'none';
+            }, 3000);
+        }
+
+        function addLocalHistory(call) {
+            localCalls.unshift(call);
+            const historyList = document.getElementById('local-history');
+            
+            historyList.innerHTML = localCalls.slice(0, 5).map(item => `
+                <li class="history-item">
+                    <span><i class="fa-solid fa-user"></i> <strong>${item.patient}</strong></span>
+                    <span class="time">${item.time}</span>
+                </li>
+            `).join('');
+        }
+
+        function saveCallToStorage(callData) {
+            let calls = JSON.parse(localStorage.getItem('ubs_recent_calls') || '[]');
+            calls.unshift(callData);
+            calls = calls.slice(0, 10);
+            localStorage.setItem('ubs_recent_calls', JSON.stringify(calls));
+            localStorage.setItem('ubs_latest_call', JSON.stringify(callData));
+        }
+
+        function openTelao() {
+            navigateTo('view-telao');
+            updateTelaoUI();
+        }
+
+        syncChannel.onmessage = (event) => {
+            if (event.data && event.data.type === 'NEW_CALL') {
+                const call = event.data.data;
+                updateTelaoDisplay(call);
+            }
+        };
+
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'ubs_latest_call' && e.newValue) {
+                const call = JSON.parse(e.newValue);
+                updateTelaoDisplay(call);
+            }
+        });
+
+        function updateTelaoDisplay(call) {
+            document.getElementById('telao-patient-name').innerText = call.patient;
+            document.getElementById('telao-room').innerText = call.room;
+            document.getElementById('telao-doctor').innerText = call.doctor;
+
+            const box = document.getElementById('main-call-box');
+            box.classList.remove('flash');
+            void box.offsetWidth;
+            box.classList.add('flash');
+
+            playChime(call.chime || 'chime-classic');
+            speakCall(call.patient, call.room, call.doctor);
+            updateTelaoHistoryList();
+        }
+
+        function updateTelaoHistoryList() {
+            const calls = JSON.parse(localStorage.getItem('ubs_recent_calls') || '[]');
+            const historyContainer = document.getElementById('telao-history-list');
+
+            if (calls.length <= 1) {
+                historyContainer.innerHTML = '<div style="color: #8892b0; text-align: center; padding: 20px;">Sem mais chamadas anteriores</div>';
+                return;
+            }
+
+            const previousCalls = calls.slice(1, 6);
+
+            historyContainer.innerHTML = previousCalls.map(item => `
+                <div class="telao-history-item">
+                    <div class="p-name">${item.patient}</div>
+                    <div class="p-meta">
+                        <span class="loc"><i class="fa-solid fa-door-open"></i> ${item.room}</span>
+                        <span><i class="fa-solid fa-user-doctor"></i> ${item.doctor || "Profissional não informado"}</span>
+                            <span><i class="fa-solid fa-clock"></i> ${item.time}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateTelaoUI() {
+            const latest = JSON.parse(localStorage.getItem('ubs_latest_call') || 'null');
+            if (latest) {
+                document.getElementById('telao-patient-name').innerText = latest.patient;
+                document.getElementById('telao-room').innerText = latest.room;
+                document.getElementById('telao-doctor').innerText = latest.doctor;
+            }
+            updateTelaoHistoryList();
+        }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    alert(`Erro ao tentar ativar Tela Cheia: ${err.message}`);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+
+        function updateClock() {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('pt-BR');
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const dateStr = now.toLocaleDateString('pt-BR', options);
+
+            const clockTime = document.getElementById('clock-time');
+            const clockDate = document.getElementById('clock-date');
+
+            if (clockTime) clockTime.innerText = timeStr;
+            if (clockDate) clockDate.innerText = dateStr.charAt(0).toUpperCase() + dateStr.slice(1);
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // Inicialização dos Dados ao Carregar a Página
+        window.addEventListener('DOMContentLoaded', () => {
+            loadConsultoriosData();
+
+            const savedChime = localStorage.getItem('ubs_saved_chime');
+            if (savedChime) {
+                const chimeSelect = document.getElementById('chime-select');
+                if (chimeSelect) chimeSelect.value = savedChime;
+            }
+        });
+    </script>
+</body>
+</html>
