@@ -217,7 +217,7 @@
             margin: 0 auto;
         }
 
-        /* 2. CONSULTORIO SELECT VIEW (15 BOTOES EDITAVEIS) */
+        /* 2. CONSULTORIO SELECT VIEW */
         .card {
             background: var(--surface);
             border-radius: var(--radius-lg);
@@ -702,7 +702,6 @@
             font-weight: 600;
         }
 
-        /* Telão Navigation & Controls */
         .home-back-btn {
             position: fixed;
             bottom: 20px;
@@ -752,7 +751,6 @@
             background: rgba(255, 255, 255, 0.3);
         }
 
-        /* RESPONSIVE DESIGN */
         @media (max-width: 900px) {
             .telao-content {
                 grid-template-columns: 1fr;
@@ -858,7 +856,7 @@
         </main>
     </section>
 
-    <!-- 2. SELEÇÃO DE CONSULTÓRIO (COM 15 BOTÕES EDITÁVEIS) -->
+    <!-- 2. SELEÇÃO DE CONSULTÓRIO -->
     <section id="view-select-consultorio" class="view">
         <header class="header-bar">
             <div class="header-brand">
@@ -877,7 +875,6 @@
             <div class="card" style="max-width: 950px; margin: 20px auto; width: 100%;">
                 <h2 class="view-title"><i class="fa-solid fa-door-open"></i> Selecione o Consultório ou Sala</h2>
                 
-                <!-- Grid com os 15 Botões Editáveis -->
                 <div class="grid-consultorios" id="grid-consultorios-list">
                     <!-- Gerado dinamicamente via JS -->
                 </div>
@@ -948,7 +945,6 @@
                     <input type="text" id="patient-input" class="form-input" placeholder="Digite o nome do paciente..." style="font-size: 1.3rem; padding: 16px;" onkeypress="handleKeyPress(event)">
                 </div>
 
-                <!-- Seletor de Sinal Sonoro -->
                 <div class="form-group">
                     <label for="chime-select" style="font-size: 1rem; color: var(--text-main);">
                         <i class="fa-solid fa-music"></i> Sinal Sonoro da Chamada:
@@ -1006,7 +1002,6 @@
         </header>
 
         <main class="telao-content">
-            <!-- Painel Principal de Chamada -->
             <div id="main-call-box" class="main-call-box">
                 <div class="patient-label"><i class="fa-solid fa-user-large"></i> Paciente Anunciado</div>
                 <div id="telao-patient-name" class="patient-name">Aguardando Chamada...</div>
@@ -1029,7 +1024,6 @@
                 </div>
             </div>
 
-            <!-- Lista de Histórico Recente -->
             <aside class="sidebar-history">
                 <h3><i class="fa-solid fa-list-ol"></i> Últimas Chamadas</h3>
                 <div id="telao-history-list" class="telao-history-list">
@@ -1038,7 +1032,6 @@
             </aside>
         </main>
 
-        <!-- Botão Pequeno para Voltar no Canto Inferior Esquerdo -->
         <button class="home-back-btn" onclick="navigateTo('view-home')">
             <i class="fa-solid fa-house"></i> Início
         </button>
@@ -1048,9 +1041,53 @@
         </button>
     </section>
 
-    <!-- LOGIC & SYNCHRONIZATION SCRIPT -->
+    <!-- FIREBASE INITIALIZATION & REALTIME SYNC -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
+        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBJxCNAs4GxzBsdQRG1ns7R6j0XXxc5N-s",
+            authDomain: "appchamada-22.firebaseapp.com",
+            projectId: "appchamada-22",
+            storageBucket: "appchamada-22.firebasestorage.app",
+            messagingSenderId: "575660120529",
+            appId: "1:575660120529:web:26fbfa5c17238d41cc28f0",
+            measurementId: "G-WP98YEECEQ"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getFirestore(app);
+
+        // Função Global para salvar a chamada no Firebase
+        window.sendCallToFirebase = async function(callData) {
+            try {
+                // Atualiza o documento 'atual' na coleção 'chamadas'
+                await setDoc(doc(db, "chamadas", "atual"), callData);
+            } catch (error) {
+                console.error("Erro ao sincronizar via Firebase:", error);
+            }
+        };
+
+        // Escuta as chamadas em Tempo Real em qualquer aba ou computador
+        let lastProcessedId = null;
+        onSnapshot(doc(db, "chamadas", "atual"), (docSnap) => {
+            if (docSnap.exists()) {
+                const call = docSnap.data();
+                if (call && call.id !== lastProcessedId) {
+                    lastProcessedId = call.id;
+                    window.updateTelaoDisplay(call);
+                }
+            }
+        });
+    </script>
+
+    <!-- LOGIC & APPLICATION SCRIPT -->
     <script>
-        // State Management
         const TOTAL_CONSULTORIOS = 15;
         let consultorios = [];
         let selectedConsultorio = '';
@@ -1059,12 +1096,10 @@
         let lastCalledPatient = '';
         let localCalls = [];
 
-        // Broadcast Channel for Multi-Tab Sync
         const syncChannel = ('BroadcastChannel' in window)
             ? new BroadcastChannel('ubs_chamadas_channel')
             : null;
 
-        // Carrega ou Inicializa os 15 Consultórios Editáveis
         function loadConsultoriosData() {
             const savedData = localStorage.getItem('ubs_consultorios_list');
             if (savedData) {
@@ -1093,7 +1128,6 @@
             localStorage.setItem('ubs_consultorios_list', JSON.stringify(consultorios));
         }
 
-        // Renderiza os 15 Cards na Tela de Seleção
         function renderConsultoriosGrid() {
             const container = document.getElementById('grid-consultorios-list');
             if (!container) return;
@@ -1184,7 +1218,6 @@
             navigateTo('view-select-consultorio');
         }
 
-        // Audio Context for Custom Chime Sounds
         function playChime(chimeType = 'chime-classic') {
             try {
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -1207,26 +1240,22 @@
                 };
 
                 if (chimeType === 'chime-modern') {
-                    // Opção 2: Beep Moderno (Duplo Suave)
-                    playNote(587.33, 0, 0.25, 'sine', 0.25);   // D5
-                    playNote(880.00, 0.2, 0.45, 'sine', 0.25);  // A5
+                    playNote(587.33, 0, 0.25, 'sine', 0.25);
+                    playNote(880.00, 0.2, 0.45, 'sine', 0.25);
                 } else if (chimeType === 'chime-bell') {
-                    // Opção 3: Campainha Suave (Sino Elegante)
-                    playNote(523.25, 0, 0.6, 'sine', 0.3);      // C5
-                    playNote(659.25, 0.15, 0.8, 'sine', 0.25);   // E5
-                    playNote(783.99, 0.3, 1.0, 'sine', 0.2);    // G5
+                    playNote(523.25, 0, 0.6, 'sine', 0.3);
+                    playNote(659.25, 0.15, 0.8, 'sine', 0.25);
+                    playNote(783.99, 0.3, 1.0, 'sine', 0.2);
                 } else {
-                    // Opção 1: Hospitalar Clássico (E5 -> C5 -> G4)
-                    playNote(659.25, 0, 0.4, 'sine', 0.3);      // E5
-                    playNote(523.25, 0.3, 0.4, 'sine', 0.3);    // C5
-                    playNote(392.00, 0.6, 0.8, 'sine', 0.3);    // G4
+                    playNote(659.25, 0, 0.4, 'sine', 0.3);
+                    playNote(523.25, 0.3, 0.4, 'sine', 0.3);
+                    playNote(392.00, 0.6, 0.8, 'sine', 0.3);
                 }
             } catch (e) {
                 console.log('Audio autoplay restricted or not supported:', e);
             }
         }
 
-        // Test Sound in Consultorio Panel
         function testSelectedSound() {
             const chimeType = document.getElementById('chime-select').value;
             playChime(chimeType);
@@ -1237,7 +1266,6 @@
             localStorage.setItem('ubs_saved_chime', chimeType);
         }
 
-        // Voice Synthesis (TTS) for Patient Call
         function speakCall(patient, room, professional) {
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
@@ -1260,13 +1288,11 @@
             }
         }
 
-        // Navigation Helper
         function navigateTo(viewId) {
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             document.getElementById(viewId).classList.add('active');
         }
 
-        // Call Actions
         function handleKeyPress(event) {
             if (event.key === 'Enter') {
                 chamarPaciente();
@@ -1307,9 +1333,16 @@
                 time: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
             };
 
+            // Envia para o Firebase (Tempo Real entre dispositivos)
+            if (typeof window.sendCallToFirebase === 'function') {
+                window.sendCallToFirebase(callData);
+            }
+
+            // Envia para abas locais via BroadcastChannel
             if (syncChannel) {
                 syncChannel.postMessage({ type: 'NEW_CALL', data: callData });
             }
+
             saveCallToStorage(callData);
             showCallAlert();
             addLocalHistory(callData);
@@ -1337,10 +1370,13 @@
 
         function saveCallToStorage(callData) {
             let calls = JSON.parse(localStorage.getItem('ubs_recent_calls') || '[]');
-            calls.unshift(callData);
-            calls = calls.slice(0, 10);
-            localStorage.setItem('ubs_recent_calls', JSON.stringify(calls));
-            localStorage.setItem('ubs_latest_call', JSON.stringify(callData));
+            // Evita duplicatas ao salvar histórico local
+            if (!calls.length || calls[0].id !== callData.id) {
+                calls.unshift(callData);
+                calls = calls.slice(0, 10);
+                localStorage.setItem('ubs_recent_calls', JSON.stringify(calls));
+                localStorage.setItem('ubs_latest_call', JSON.stringify(callData));
+            }
         }
 
         function openTelao() {
@@ -1348,12 +1384,14 @@
             updateTelaoUI();
         }
 
-        syncChannel.onmessage = (event) => {
-            if (event.data && event.data.type === 'NEW_CALL') {
-                const call = event.data.data;
-                updateTelaoDisplay(call);
-            }
-        };
+        if (syncChannel) {
+            syncChannel.onmessage = (event) => {
+                if (event.data && event.data.type === 'NEW_CALL') {
+                    const call = event.data.data;
+                    updateTelaoDisplay(call);
+                }
+            };
+        }
 
         window.addEventListener('storage', (e) => {
             if (e.key === 'ubs_latest_call' && e.newValue) {
@@ -1362,7 +1400,9 @@
             }
         });
 
-        function updateTelaoDisplay(call) {
+        window.updateTelaoDisplay = function(call) {
+            saveCallToStorage(call);
+
             document.getElementById('telao-patient-name').innerText = call.patient;
             document.getElementById('telao-room').innerText = call.room;
             document.getElementById('telao-doctor').innerText = call.doctor;
@@ -1437,7 +1477,6 @@
         setInterval(updateClock, 1000);
         updateClock();
 
-        // Inicialização dos Dados ao Carregar a Página
         window.addEventListener('DOMContentLoaded', () => {
             loadConsultoriosData();
 
